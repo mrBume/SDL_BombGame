@@ -9,6 +9,8 @@ using namespace std;
 const int WIDTH = 500;
 const int HEIGHT = 320;
 
+const string char_sprite_data = "assets/sprites.dat";
+
 SDLApp *app = nullptr;
 Character *ramiro = nullptr;
 
@@ -62,7 +64,7 @@ int main(int argc, char *argv[])
   bool isRunning = true;
 
   app = new SDLApp("Bombman", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT);
-  ramiro = new Character(app->getRenderer(), "assets/Sprite.png", {100, 100});
+  ramiro = new Character(app->getRenderer(), char_sprite_data, {100, 100});
 
   app->setEventCallback(eventHandler);
   app->setRenderCallback(renderHandler);

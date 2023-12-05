@@ -4,12 +4,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "AnimatedSprite.hpp"
+#include <AnimatedSprite.hpp>
+#include <Utils.hpp>
 
 // Constructor
 AnimatedSprite::AnimatedSprite(SDL_Renderer *renderer, std::string filepath)
 {
-    SDL_Surface *retrieveSurface = IMG_Load(filepath.c_str());
+    Utils::readSpriteData(filepath, sprite_sheet, sprites, animations);
+    SDL_Surface *retrieveSurface = IMG_Load(sprite_sheet.c_str());
 
     if (retrieveSurface == nullptr)
         std::cout << "Error " << IMG_GetError() << std::endl;
@@ -17,8 +19,6 @@ AnimatedSprite::AnimatedSprite(SDL_Renderer *renderer, std::string filepath)
     m_texture = SDL_CreateTextureFromSurface(renderer, retrieveSurface);
 
     SDL_FreeSurface(retrieveSurface);
-
-    m_current_frame = 0;
 }
 
 // Destructor
@@ -27,16 +27,13 @@ AnimatedSprite::~AnimatedSprite()
     SDL_DestroyTexture(m_texture);
 }
 
-void AnimatedSprite::setProps(int x, int y, int w, int h, Uint8 speed)
+void AnimatedSprite::setProps(std::string animation_index, Uint8 speed)
 {
-    m_src.x = x;
-    m_src.y = y;
-    m_src.w = w;
-    m_src.h = h;
+    current_anim = animation_index;
+    current_frame = animations[current_anim].begin();
 
     m_speed = speed;
     m_framecount = 0;
-    m_current_frame = 0;
 }
 
 void AnimatedSprite::Update()
@@ -51,32 +48,23 @@ void AnimatedSprite::Update()
     if (m_framecount % m_speed == 0)
     {
         m_framecount = 0;
-
-        if (m_current_frame == 0)
+        if(current_frame + 1 != animations[current_anim].end())
         {
-            m_current_frame = 1;
-        }
-        else if (m_current_frame == 2)
-        {
-            m_current_frame = 1;
-        }
-        else if (!dir)
-        {
-            m_current_frame = 2;
-            dir = true;
+            current_frame++;
         }
         else
         {
-            dir = false;
-            m_current_frame = 0;
+            current_frame = animations[current_anim].begin();
         }
     }
 }
 
-void AnimatedSprite::Render(SDL_Renderer *renderer, int x, int y, int w, int h, SDL_RendererFlip flip)
+void AnimatedSprite::Render(SDL_Renderer *renderer, int x, int y, int w, int h)
 {
     SDL_Rect dest = {x, y, w, h};
-    SDL_Rect src = {m_src.x + m_src.w * m_current_frame, m_src.y, m_src.w, m_src.h};
+    SDL_Rect src = sprites[*current_frame - 1];
 
-    SDL_RenderCopyEx(renderer, m_texture, &src, &dest, 0.0, nullptr, flip);
+    // std::cout << Utils::rectToStr(src) << std::endl;
+
+    SDL_RenderCopy(renderer, m_texture, &src, &dest);
 }

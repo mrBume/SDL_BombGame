@@ -40,7 +40,7 @@ void Character::update()
 
 void Character::render(SDL_Renderer *render)
 {
-    sprite->Render(render, position.x, position.y, 32, 48, flip);
+    sprite->Render(render, position.x, position.y, 32, 48);
 }
 
 void Character::setDir(Direction dir)
@@ -52,14 +52,16 @@ void Character::setDir(Direction dir)
             switch (direction)
             {
             case UP:
-                sprite->setProps(16, 0, 16, 24, 0);
+                sprite->setProps("IU", 0);
                 break;
             case DOWN:
-                sprite->setProps(16, 48, 16, 24, 0);
+                sprite->setProps("ID", 0);
                 break;
             case LEFT:
+                sprite->setProps("IL", 0);
+                break;
             case RIGHT:
-                sprite->setProps(0, 24, 16, 24, 0);
+                sprite->setProps("IR", 0);
                 break;
             default:
                 break;
@@ -70,14 +72,16 @@ void Character::setDir(Direction dir)
             switch (dir)
             {
             case UP:
-                sprite->setProps(0, 0, 16, 24, 4);
+                sprite->setProps("UP", 4);
                 break;
             case DOWN:
-                sprite->setProps(0, 48, 16, 24, 4);
+                sprite->setProps("DOWN", 4);
                 break;
             case LEFT:
+                sprite->setProps("LEFT", 4);
+                break;
             case RIGHT:
-                sprite->setProps(0, 24, 16, 24, 4);
+                sprite->setProps("RIGHT", 4);
                 break;
             default:
                 break;
