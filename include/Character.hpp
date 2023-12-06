@@ -33,7 +33,6 @@ private:
     Direction direction;
     SDL_Rect hitbox;
     int velocity;
-    SDL_RendererFlip flip;
 };
 
 #endif // CHARACTER_HPP

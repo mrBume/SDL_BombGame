@@ -6,7 +6,6 @@ Character::Character(SDL_Renderer *render, std::string filename, Vect2D pos)
 
     position = pos;
     velocity = 4;
-    flip = SDL_FLIP_NONE;
     setDir(DOWN);
 }
 
@@ -87,7 +86,6 @@ void Character::setDir(Direction dir)
                 break;
             }
 
-            flip = dir == RIGHT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
         }
 
         direction = dir;

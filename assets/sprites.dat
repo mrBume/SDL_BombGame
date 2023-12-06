@@ -1,39 +1,32 @@
-assets/Sprite.png
-18
-0 0 16 24
-16 0 16 24
-32 0 16 24
-0 24 16 24
-16 24 16 24
-32 24 16 24
-0 48 16 24
-16 48 16 24
-32 48 16 24
-0 72 16 24
-16 72 16 24
-32 72 16 24
-0 96 16 24
-16 96 16 24
-32 96 16 24
-0 120 16 24
-16 120 16 24
-32 120 16 24
-9
-UP
-1 2 3 2
-DOWN
-4 5 6 5
-LEFT
-7 8 9 8
-RIGHT
-10 11 12 11
-DIE
-13 14 15 16 17 18
-IU
-2
-ID
-5
-IL
-8
-IR
-11
+<?xml version="1.0"?>
+<Spritesheet sourcefile="assets/Sprite.png">
+    <Frame id="0" x="0" y="0" w="16" h="24"></Frame>
+    <Frame id="1" x="16" y="0" w="16" h="24"></Frame>
+    <Frame id="2" x="32" y="0" w="16" h="24"></Frame>
+    <Frame id="3" x="0" y="24" w="16" h="24"></Frame>
+    <Frame id="4" x="16" y="24" w="16" h="24"></Frame>
+    <Frame id="5" x="32" y="24" w="16" h="24"></Frame>
+    <Frame id="6" x="0" y="48" w="16" h="24"></Frame>
+    <Frame id="7" x="16" y="48" w="16" h="24"></Frame>
+    <Frame id="8" x="32" y="48" w="16" h="24"></Frame>
+    <Frame id="9" x="0" y="72" w="16" h="24"></Frame>
+    <Frame id="10" x="16" y="72" w="16" h="24"></Frame>
+    <Frame id="11" x="32" y="72" w="16" h="24"></Frame>
+    <Frame id="12" x="0" y="96" w="16" h="24"></Frame>
+    <Frame id="13" x="16" y="96" w="16" h="24"></Frame>
+    <Frame id="14" x="32" y="96" w="16" h="24"></Frame>
+    <Frame id="15" x="0" y="120" w="16" h="24"></Frame>
+    <Frame id="16" x="16" y="120" w="16" h="24"></Frame>
+    <Frame id="17" x="32" y="120" w="16" h="24"></Frame>
+    <Animation name="UP" frames="0, 1, 2, 1" speed = "8"></Animation>
+    <Animation name="DOWN" frames="3, 4, 5, 4" speed = "8"></Animation>
+    <Animation name="LEFT" frames="6, 7, 8, 7" speed = "8"></Animation>
+    <Animation name="RIGHT" frames="9, 10, 11, 10" speed = "8"></Animation>
+    <Animation name="DIE" frames="12, 13, 14, 15, 16, 17" speed = "12"></Animation>
+    <Animation name="IU" frames="1" speed = "0"></Animation>
+    <Animation name="ID" frames="4" speed = "0"></Animation>
+    <Animation name="IL" frames="7" speed = "0"></Animation>
+    <Animation name="IR" frames="10" speed = "0"></Animation>
+</Spritesheet>
+
+

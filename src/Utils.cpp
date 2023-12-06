@@ -3,13 +3,14 @@
 #include <vector>
 #include <unordered_map>
 #include <Utils.hpp>
+#include <rapidxml.hpp>
 
 using namespace std;
 
-void Utils::readSpriteData(string bin_name, string & sprite_sheet, vector<SDL_Rect> & sprites, std::unordered_map<std::string, std::vector<int>> & anim)
+void Utils::readSpriteData(string bin_name, string & sprite_sheet, vector<SDL_Rect> & sprites, unordered_map<string, AnimatedSprite::Animation> & animations)
 {
     // read sprite.dat
-    fstream file;
+    ifstream file;
     file.open("assets/sprites.dat");
     if (!file.is_open())
     {
@@ -17,70 +18,61 @@ void Utils::readSpriteData(string bin_name, string & sprite_sheet, vector<SDL_Re
         return;
     }
 
-    string line;
     string filename;
-    string tmp;
-    vector<SDL_Rect> rects;
-    vector<int> frame_props;
-    unordered_map<string, vector<int>> animations;
+    vector<SDL_Rect> local_sprites;
+    unordered_map<string, AnimatedSprite::Animation> local_animations; 
 
-    getline(file, filename);
-    getline(file, line); // sprites
+    rapidxml::xml_document doc;
+    vector<char> buffer((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    buffer.push_back('\0');
 
-    for (int i = 0; i < atoi(line.c_str()); i++)
+    doc.parse<0>(&buffer[0]);
+
+    filename = doc.first_node("Spritesheet")->first_attribute("sourcefile")->value();
+
+    for (rapidxml::xml_node<> *node = doc.first_node("Spritesheet")->first_node(); node != nullptr; node = node->next_sibling())
     {
-        getline(file, tmp);
-        frame_props = splitString(tmp);
-        rects.push_back({frame_props[0], frame_props[1], frame_props[2], frame_props[3]});
-    }
+        if("Frame" == static_cast<string>(node->name()))
+        {
+            SDL_Rect local_rect = {
+                atoi((node->first_attribute("x")->value())),
+                atoi((node->first_attribute("y")->value())),
+                atoi((node->first_attribute("w")->value())),
+                atoi((node->first_attribute("h")->value()))
+                };
+            local_sprites.push_back(local_rect);
+        }
 
-    getline(file, line); // animations
-    for (int i = 0; i < atoi(line.c_str()); i++)
-    {
-        string name;
-        vector<int> frames;
-        // animation name
-        getline(file, name);
-        // animation sprites
-        getline(file, tmp);
-        frames = splitString(tmp);
-        animations[name] = frames;
-    }
 
-    // // check info
-    // for (auto rect : rects)
-    // {
-    //     cout << "x: " << std::to_string(rect.x) << ", y: " << std::to_string(rect.y) << ", w: " << std::to_string(rect.w) << ", h: " << std::to_string(rect.h) << endl;
-    // }
-    // for (auto anim : animations)
-    // {
-    //     cout << anim.first << " ";
-    //     for (auto item : anim.second)
-    //     {
-    //         cout << to_string(item) << " ";
-    //     }
-    //     cout << endl;
-    // }
+        if("Animation" == static_cast<string>(node->name()))
+        {
+            local_animations[node->first_attribute("name")->value()].frames = splitString(node->first_attribute("frames")->value());
+            local_animations[node->first_attribute("name")->value()].speed = atoi(node->first_attribute("speed")->value());
+        }
+    }
 
     sprite_sheet = filename;
-    sprites = rects;
-    anim = animations;
+    sprites = local_sprites;
+    animations = local_animations;
+
+    
 
     file.close();
+
 }
 
-vector<int> Utils::splitString(string text)
+vector<Uint8> Utils::splitString(string text)
 {
-    vector<int> ret;
+    vector<Uint8> ret;
     string tmp = "";
 
     for (auto ch : text)
     {
-        if (ch != ' ')
+        if (ch != ' ' && ch != ',')
         {
             tmp += ch;
         }
-        else
+        else if (tmp != "")
         {
             ret.push_back(stoi(tmp));
             tmp = "";
@@ -95,7 +87,7 @@ string Utils::rectToStr(SDL_Rect rect)
 {
     string text = "";
 
-    text += "{ x: " + std::to_string(rect.x) + ", y: " + std::to_string(rect.y)  + ", w: " +std::to_string(rect.w) +", h: "+ std::to_string(rect.h);
+    text += "{ x: " + to_string(rect.x) + ", y: " + to_string(rect.y)  + ", w: " +std::to_string(rect.w) +", h: "+ std::to_string(rect.h);
     
     return text;
 }

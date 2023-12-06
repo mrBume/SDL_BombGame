@@ -10,6 +10,12 @@ class AnimatedSprite
 {
 public:
 
+    struct Animation
+    {
+        std::vector<Uint8> frames;
+        Uint8 speed;
+    };
+
     // Constructor
     AnimatedSprite(SDL_Renderer *renderer, std::string filepath);
 
@@ -34,8 +40,8 @@ private:
 
     std::string sprite_sheet;
     std::vector<SDL_Rect> sprites;
-    std::unordered_map<std::string, std::vector<int>> animations;
-    std::vector<int>::iterator current_frame;
+    std::unordered_map<std::string, Animation> animations;
+    std::vector<Uint8>::iterator current_frame;
     std::string current_anim;
 };
 

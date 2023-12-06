@@ -61,8 +61,6 @@ void renderHandler()
 
 int main(int argc, char *argv[])
 {
-  bool isRunning = true;
-
   app = new SDLApp("Bombman", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT);
   ramiro = new Character(app->getRenderer(), char_sprite_data, {100, 100});
 

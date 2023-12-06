@@ -30,16 +30,14 @@ AnimatedSprite::~AnimatedSprite()
 void AnimatedSprite::setProps(std::string animation_index, Uint8 speed)
 {
     current_anim = animation_index;
-    current_frame = animations[current_anim].begin();
+    current_frame = animations[current_anim].frames.begin();
 
-    m_speed = speed;
+    m_speed = animations[current_anim].speed;
     m_framecount = 0;
 }
 
 void AnimatedSprite::Update()
 {
-    static bool dir = false;
-
     if (m_speed == 0)
         return;
 
@@ -48,13 +46,13 @@ void AnimatedSprite::Update()
     if (m_framecount % m_speed == 0)
     {
         m_framecount = 0;
-        if(current_frame + 1 != animations[current_anim].end())
+        if(current_frame + 1 != animations[current_anim].frames.end())
         {
             current_frame++;
         }
         else
         {
-            current_frame = animations[current_anim].begin();
+            current_frame = animations[current_anim].frames.begin();
         }
     }
 }
@@ -62,7 +60,7 @@ void AnimatedSprite::Update()
 void AnimatedSprite::Render(SDL_Renderer *renderer, int x, int y, int w, int h)
 {
     SDL_Rect dest = {x, y, w, h};
-    SDL_Rect src = sprites[*current_frame - 1];
+    SDL_Rect src = sprites[*current_frame];
 
     // std::cout << Utils::rectToStr(src) << std::endl;
 
